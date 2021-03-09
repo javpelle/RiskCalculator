@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Risk Calculator
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="thisForm" (ngSubmit)="calcular()" class="ion-padding">
+    <ion-item>
+      <ion-icon slot="start" name="caret-up" color="danger"></ion-icon>
+      <ion-label position="floating">Atacantes</ion-label>
+      <ion-input type="number" placeholder="3" formControlName="attack"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" name="caret-down" color="success"></ion-icon>
+      <ion-label position="floating">Defensores</ion-label>
+      <ion-input type="number" placeholder="2" formControlName="defense"></ion-input>
+    </ion-item>
+    <ion-button class="ion-margin-top" type="submit" [disabled]="executing">Calcular</ion-button>
+  </form>
+  <div *ngIf="result">
+    <ion-row class="row">
+      <ion-col> ATACANTES </ion-col>
+      <ion-col> DEFENSORES </ion-col>
+    </ion-row>
+    <ion-row class="row">
+      <ion-col> Restantes: {{remainingAttackers}} (<ion-icon name="skull"></ion-icon>
+        {{attackersLost}})</ion-col>
+      <ion-col> Restantes: {{remainingDefenders}} (<ion-icon name="skull"></ion-icon>
+        {{defendersLost}}) </ion-col>
+    </ion-row>
+  </div>
+  <ion-row class="row" *ngFor="let i of rollListShow">
+    <ion-col><img class="die" *ngFor="let j of i.attackerDice" src="assets/img/R{{j}}.png" />
+      <img class="soldier" *ngFor="let k of [].constructor(i.attackerLost)" src="assets/img/soldier.png" />
+    </ion-col>
+    <ion-col><img class="die" *ngFor="let j of i.defenserDice" src="assets/img/G{{j}}.png" />
+      <img class="soldier" *ngFor="let k of [].constructor(i.defenserLost)" src="assets/img/soldier.png" />
+    </ion-col>
+  </ion-row>
+
+  <ion-infinite-scroll *ngIf="enabledScroll" threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
